@@ -2,8 +2,9 @@
 
 import { useState } from 'react';
 import { AppState, Task, TaskCompletion, TIME_BLOCKS, AREA_CONFIG, todayStr, isTaskActiveToday, generateId } from '../types';
+import LifeEvents from './LifeEvents';
 
-interface Props { state: AppState; onUpdate: (s: AppState) => void; }
+interface Props { state: AppState; onUpdate: (s: AppState) => void; onSwitchToChat: (prefill?: string) => void; }
 
 function FeedbackModal({ task, completion, onSave, onClose }: {
   task: Task;
@@ -85,7 +86,7 @@ function DayRatingModal({ onSave, onClose }: { onSave: (rating: number, note: st
   );
 }
 
-export default function DailyView({ state, onUpdate }: Props) {
+export default function DailyView({ state, onUpdate, onSwitchToChat }: Props) {
   const [feedbackTask, setFeedbackTask] = useState<Task | null>(null);
   const [showDayRating, setShowDayRating] = useState(false);
 
@@ -151,6 +152,9 @@ export default function DailyView({ state, onUpdate }: Props) {
           {progress === 100 && ' — Amazing! 🎉'}
         </p>
       </div>
+
+      {/* Life Events */}
+      <LifeEvents state={state} onUpdate={onUpdate} onSwitchToChat={onSwitchToChat} />
 
       {/* Time blocks */}
       {TIME_BLOCKS.map(block => {

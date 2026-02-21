@@ -10,6 +10,7 @@ export default function Settings({ state, onUpdate }: Props) {
   const [areas, setAreas] = useState<WellnessArea[]>(state.profile.areas);
   const [goals, setGoals] = useState(state.profile.goals.join(', '));
   const [constraints, setConstraints] = useState(state.profile.constraints);
+  const [apiKey, setApiKey] = useState(state.anthropicKey || '');
   const [saved, setSaved] = useState(false);
 
   const toggleArea = (a: WellnessArea) =>
@@ -24,6 +25,7 @@ export default function Settings({ state, onUpdate }: Props) {
         goals: goals.split(',').map(g => g.trim()).filter(Boolean),
         constraints,
       },
+      anthropicKey: apiKey || undefined,
     });
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
@@ -73,6 +75,19 @@ export default function Settings({ state, onUpdate }: Props) {
           <textarea value={constraints} onChange={e => setConstraints(e.target.value)}
             placeholder="Allergies, injuries, time limits..."
             className="w-full px-4 py-3 rounded-xl bg-white border border-gray-100 text-sm mt-1 focus:outline-none focus:ring-2 focus:ring-[#8fbc8f]/50 resize-none h-20" />
+        </div>
+
+        <div>
+          <label className="text-xs font-medium text-[var(--text-muted)] uppercase tracking-wide">AI Wellness Coach</label>
+          <div className="bg-[#f0ebfa] rounded-xl p-3 mt-1 mb-2">
+            <p className="text-xs text-[var(--text-muted)]">
+              Enter your Anthropic API key to enable AI features. Your key is stored locally and never sent to our servers.
+            </p>
+          </div>
+          <input type="password" value={apiKey} onChange={e => setApiKey(e.target.value)}
+            placeholder="sk-ant-..."
+            className="w-full px-4 py-3 rounded-xl bg-white border border-gray-100 text-sm mt-1 focus:outline-none focus:ring-2 focus:ring-[#c4b5e0]/50 font-mono" />
+          {apiKey && <p className="text-xs text-[#8fbc8f] mt-1">✓ API key configured</p>}
         </div>
 
         <button onClick={save}

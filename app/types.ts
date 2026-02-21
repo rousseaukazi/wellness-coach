@@ -61,11 +61,28 @@ export interface UserProfile {
   onboarded: boolean;
 }
 
+export interface LifeEvent {
+  id: string;
+  date: string;
+  description: string;
+  processed: boolean;
+}
+
+export interface ChatMessage {
+  id: string;
+  role: 'user' | 'assistant';
+  content: string;
+  timestamp: number;
+}
+
 export interface AppState {
   profile: UserProfile;
   tasks: Task[];
   completions: TaskCompletion[];
   ratings: DayRating[];
+  lifeEvents: LifeEvent[];
+  chatHistory: ChatMessage[];
+  anthropicKey?: string;
 }
 
 export const DEFAULT_STATE: AppState = {
@@ -73,6 +90,8 @@ export const DEFAULT_STATE: AppState = {
   tasks: [],
   completions: [],
   ratings: [],
+  lifeEvents: [],
+  chatHistory: [],
 };
 
 export function todayStr(): string {
@@ -83,13 +102,39 @@ export function generateId(): string {
   return Math.random().toString(36).slice(2, 10);
 }
 
-export function isTaskActiveToday(task: Task): boolean {
-  const day = new Date().getDay(); // 0=Sun
+export function isTaskActiveOnDay(task: Task, dayOfWeek: number): boolean {
   switch (task.frequency) {
     case 'daily': return true;
-    case 'weekdays': return day >= 1 && day <= 5;
-    case 'weekends': return day === 0 || day === 6;
-    case 'mwf': return [1, 3, 5].includes(day);
-    case 'tts': return [2, 4, 6].includes(day);
+    case 'weekdays': return dayOfWeek >= 1 && dayOfWeek <= 5;
+    case 'weekends': return dayOfWeek === 0 || dayOfWeek === 6;
+    case 'mwf': return [1, 3, 5].includes(dayOfWeek);
+    case 'tts': return [2, 4, 6].includes(dayOfWeek);
   }
+}
+
+export function isTaskActiveToday(task: Task): boolean {
+  return isTaskActiveOnDay(task, new Date().getDay());
+}
+
+export function getWeekDates(): { date: Date; dateStr: string; dayOfWeek: number; label: string; isToday: boolean }[] {
+  const today = new Date();
+  const currentDay = today.getDay();
+  const monday = new Date(today);
+  monday.setDate(today.getDate() - ((currentDay + 6) % 7));
+  
+  const days = [];
+  const dayLabels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(monday);
+    d.setDate(monday.getDate() + i);
+    const dateStr = d.toISOString().split('T')[0];
+    days.push({
+      date: d,
+      dateStr,
+      dayOfWeek: d.getDay(),
+      label: dayLabels[d.getDay()],
+      isToday: dateStr === todayStr(),
+    });
+  }
+  return days;
 }
