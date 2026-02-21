@@ -1,0 +1,5 @@
+1:"$Sreact.fragment"
+2:I[32432,["/wellness-coach/_next/static/chunks/90755f72d319530c.js"],"OutletBoundary"]
+3:"$Sreact.suspense"
+0:{"buildId":"la3UVnXkPbH5s7wHgV885","rsc":["$","$1","c",{"children":[["$","div",null,{"style":{"padding":40,"textAlign":"center"},"children":[["$","h2",null,{"children":"Page not found"}],["$","a",null,{"href":"/wellness-coach","children":"Go home"}]]}],null,["$","$L2",null,{"children":["$","$3",null,{"name":"Next.MetadataOutlet","children":"$@4"}]}]]}],"loading":null,"isPartial":false}
+4:null
