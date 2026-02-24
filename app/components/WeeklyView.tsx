@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { AppState, AREA_CONFIG, TIME_BLOCKS, isTaskActiveOnDay, getWeekDates, WellnessArea } from '../types';
+import WeeklyProgressCharts from '../../components/WeeklyProgressCharts';
 
 interface Props { state: AppState; onUpdate: (s: AppState) => void; }
 
@@ -15,6 +16,9 @@ export default function WeeklyView({ state }: Props) {
       <p className="text-sm text-[var(--text-muted)] mb-5">
         {weekDays[0].date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} – {weekDays[6].date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
       </p>
+
+      {/* Weekly Progress Charts */}
+      <WeeklyProgressCharts state={state} />
 
       <div className="space-y-2">
         {weekDays.map(day => {

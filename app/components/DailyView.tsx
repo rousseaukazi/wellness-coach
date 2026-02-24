@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import { AppState, Task, TaskCompletion, TIME_BLOCKS, AREA_CONFIG, todayStr, isTaskActiveToday, generateId } from '../types';
 import LifeEvents from './LifeEvents';
+import QuickActions from '../../components/QuickActions';
+import SmartSuggestions from '../../components/SmartSuggestions';
 
 interface Props { state: AppState; onUpdate: (s: AppState) => void; onSwitchToChat: (prefill?: string) => void; }
 
@@ -155,6 +157,12 @@ export default function DailyView({ state, onUpdate, onSwitchToChat }: Props) {
 
       {/* Life Events */}
       <LifeEvents state={state} onUpdate={onUpdate} onSwitchToChat={onSwitchToChat} />
+
+      {/* Quick Actions */}
+      <QuickActions state={state} onUpdate={onUpdate} />
+
+      {/* Smart Suggestions */}
+      <SmartSuggestions state={state} />
 
       {/* Time blocks */}
       {TIME_BLOCKS.map(block => {
